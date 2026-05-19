@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import cake from "../assets/cake6.jpg";
+import cake from "../assets/cake1.jpg";
 
 export default function Register() {
 

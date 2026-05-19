@@ -1,32 +1,57 @@
-import { Link } from "react-router-dom";
-
-import cake from "../assets/images.jpg";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import cake from "../assets/cake1.jpg";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/admin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+      const data = await res.json();
+
+      console.log("LOGIN RESPONSE:", data);
+
+      // 🔥 SAFE CHECK
+      if (res.ok && data.message === "Login Success") {
+        alert("Login Success 🚀");
+        navigate("/dashboard");
+      } else {
+        alert(data.message || "Invalid Email or Password ❌");
+      }
+
+    } catch (error) {
+      console.log("LOGIN ERROR:", error);
+      alert("Server Error ❌ Check backend connection");
+    }
+  };
 
   return (
-
     <div style={styles.container}>
 
-      {/* LEFT IMAGE SECTION */}
+      {/* LEFT IMAGE */}
       <div style={styles.left}>
-
-        <img
-          src={cake}
-          alt="cake"
-          style={styles.image}
-        />
-
+        <img src={cake} alt="cake" style={styles.image} />
       </div>
 
-      {/* RIGHT LOGIN SECTION */}
+      {/* RIGHT FORM */}
       <div style={styles.right}>
-
         <div style={styles.formBox}>
 
-          <h1 style={styles.logo}>
-            Taste of Heaven
-          </h1>
+          <h1 style={styles.logo}>Taste of Heaven</h1>
 
           <p style={styles.subtitle}>
             Login to continue your sweet journey 🍰
@@ -36,17 +61,20 @@ export default function Login() {
             type="email"
             placeholder="Email Address*"
             style={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
             type="password"
             placeholder="Password*"
             style={styles.input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
-          {/* REMEMBER */}
+          {/* OPTIONS */}
           <div style={styles.options}>
-
             <div style={styles.checkBox}>
               <input type="checkbox" />
               <span>Remember Me</span>
@@ -55,39 +83,31 @@ export default function Login() {
             <span style={styles.forgot}>
               Forgot Password?
             </span>
-
           </div>
 
           {/* BUTTON */}
-          <button style={styles.button}>
+          <button style={styles.button} onClick={handleLogin}>
             Login
           </button>
 
-          {/* REGISTER LINK */}
+          {/* REGISTER */}
           <p style={styles.registerText}>
-
             Don’t have an account?
-
             <Link to="/register" style={styles.link}>
               {" "}Register
             </Link>
-
           </p>
 
         </div>
-
       </div>
 
     </div>
-
   );
-
 }
 
 /* ================= STYLES ================= */
 
 const styles = {
-
   container: {
     display: "flex",
     height: "100vh",
@@ -143,8 +163,7 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "8px",
     outline: "none",
-    fontSize: "14px",
-    boxSizing: "border-box"
+    fontSize: "14px"
   },
 
   options: {
@@ -191,5 +210,4 @@ const styles = {
     color: "#8B0000",
     fontWeight: "bold"
   }
-
 };
