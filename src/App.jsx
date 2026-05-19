@@ -3,6 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard"; // 🔥 ADD THIS
 
 import cake1 from "./assets/cake1.jpg";
 import cake2 from "./assets/cake2.jpg";
@@ -14,21 +15,16 @@ function Home() {
   const images = [cake1, cake2, cake3];
 
   const [index, setIndex] = useState(0);
-
   const [cart, setCart] = useState([]);
-
   const [showMenu, setShowMenu] = useState(false);
-
   const [showCart, setShowCart] = useState(false);
 
   useEffect(() => {
-
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
     }, 3000);
 
     return () => clearInterval(interval);
-
   }, []);
 
   const cakes = [
@@ -46,7 +42,6 @@ function Home() {
   };
 
   return (
-
     <div>
 
       {/* NAVBAR */}
@@ -63,12 +58,10 @@ function Home() {
           <span>Contact</span>
         </div>
 
-        {/* RIGHT SIDE ICONS */}
+        {/* RIGHT SIDE */}
         <div style={styles.icons}>
 
-          {/* LOGIN DROPDOWN */}
           <div style={styles.dropdownContainer}>
-
             <span
               style={styles.icon}
               onClick={() => setShowMenu(!showMenu)}
@@ -77,7 +70,6 @@ function Home() {
             </span>
 
             {showMenu && (
-
               <div style={styles.dropdown}>
 
                 <Link to="/login" style={styles.dropdownLink}>
@@ -88,13 +80,15 @@ function Home() {
                   Register
                 </Link>
 
+                {/* 🔥 DASHBOARD LINK */}
+                <Link to="/dashboard" style={styles.dropdownLink}>
+                  Admin
+                </Link>
+
               </div>
-
             )}
-
           </div>
 
-          {/* CART ICON */}
           <span
             style={styles.icon}
             onClick={() => setShowCart(!showCart)}
@@ -103,47 +97,25 @@ function Home() {
           </span>
 
         </div>
-
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO */}
       <div style={styles.hero}>
-
-        <img
-          src={images[index]}
-          style={styles.image}
-        />
-
+        <img src={images[index]} style={styles.image} />
         <div style={styles.overlay}>
-
           <h1>Fresh & Delicious Cakes 🍰</h1>
-
-          <p>
-            Order your favorite cakes online with Choco Heaven
-          </p>
-
+          <p>Order your favorite cakes online with Choco Heaven</p>
         </div>
-
       </div>
 
       {/* PRODUCTS */}
-      <h2 style={styles.title}>
-        🍰 Our Cakes
-      </h2>
+      <h2 style={styles.title}>🍰 Our Cakes</h2>
 
       <div style={styles.container}>
-
         {cakes.map((cake) => (
-
           <div key={cake.id} style={styles.card}>
-
-            <img
-              src={cake.img}
-              style={styles.img}
-            />
-
+            <img src={cake.img} style={styles.img} />
             <h3>{cake.name}</h3>
-
             <p>Rs. {cake.price}</p>
 
             <button
@@ -152,32 +124,21 @@ function Home() {
             >
               Add to Cart
             </button>
-
           </div>
-
         ))}
-
       </div>
 
-      {/* CART PAGE */}
+      {/* CART */}
       {showCart && (
-
         <div style={styles.cartBox}>
-
           <h2>🛒 Cart Items</h2>
 
           {cart.length === 0 ? (
-
             <p>No items added</p>
-
           ) : (
-
             cart.map((item, id) => (
-
               <div key={id} style={styles.cartItem}>
-
                 <p>{item.name}</p>
-
                 <p>Rs. {item.price}</p>
 
                 <button
@@ -186,59 +147,38 @@ function Home() {
                 >
                   Remove
                 </button>
-
               </div>
-
             ))
-
           )}
-
         </div>
-
       )}
 
       {/* FOOTER */}
       <footer style={styles.footer}>
-
         <h2>🍰 CHOCO HEAVEN</h2>
-
         <p>Fresh Cakes Delivered With Love ❤️</p>
-
-        <p>Email: chocoheaven@gmail.com</p>
-
-        <p>Phone: +94 77 123 4567</p>
-
-        <p>© 2026 All Rights Reserved</p>
-
       </footer>
 
     </div>
-
   );
 }
 
 /* ================= APP ROUTES ================= */
 export default function App() {
-
   return (
-
     <Routes>
-
       <Route path="/" element={<Home />} />
-
       <Route path="/login" element={<Login />} />
-
       <Route path="/register" element={<Register />} />
 
+      {/* 🔥 DASHBOARD ROUTE */}
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
-
   );
-
 }
 
 /* ================= STYLES ================= */
 const styles = {
-
   nav: {
     display: "flex",
     justifyContent: "space-between",
@@ -295,9 +235,7 @@ const styles = {
     borderBottom: "1px solid #eee"
   },
 
-  hero: {
-    position: "relative"
-  },
+  hero: { position: "relative" },
 
   image: {
     width: "100%",
@@ -380,5 +318,4 @@ const styles = {
     textAlign: "center",
     padding: "30px"
   }
-
 };

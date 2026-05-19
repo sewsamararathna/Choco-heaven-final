@@ -3,60 +3,100 @@ import { useNavigate, Link } from "react-router-dom";
 import cake from "../assets/cake1.jpg";
 
 export default function Login() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
 
+  /* ================= LOGIN FUNCTION ================= */
+
   const handleLogin = async () => {
+
+    // EMPTY CHECK
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
+    }
+
     try {
+
       const res = await fetch("http://localhost:5000/admin/login", {
+
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify({
-          email,
-          password
+          email: email,
+          password: password
         })
+
       });
 
       const data = await res.json();
 
       console.log("LOGIN RESPONSE:", data);
 
-      // 🔥 SAFE CHECK
+      // SUCCESS
       if (res.ok && data.message === "Login Success") {
+
         alert("Login Success 🚀");
+
         navigate("/dashboard");
-      } else {
-        alert(data.message || "Invalid Email or Password ❌");
+
       }
 
-    } catch (error) {
-      console.log("LOGIN ERROR:", error);
-      alert("Server Error ❌ Check backend connection");
+      // INVALID
+      else {
+
+        alert(data.message || "Invalid Email or Password ❌");
+
+      }
+
     }
+
+    catch (error) {
+
+      console.log("LOGIN ERROR:", error);
+
+      alert("Server Error ❌ Check backend connection");
+
+    }
+
   };
 
   return (
+
     <div style={styles.container}>
 
       {/* LEFT IMAGE */}
       <div style={styles.left}>
-        <img src={cake} alt="cake" style={styles.image} />
+
+        <img
+          src={cake}
+          alt="cake"
+          style={styles.image}
+        />
+
       </div>
 
       {/* RIGHT FORM */}
       <div style={styles.right}>
+
         <div style={styles.formBox}>
 
-          <h1 style={styles.logo}>Taste of Heaven</h1>
+          <h1 style={styles.logo}>
+            Taste of Heaven
+          </h1>
 
           <p style={styles.subtitle}>
             Login to continue your sweet journey 🍰
           </p>
 
+          {/* EMAIL */}
           <input
             type="email"
             placeholder="Email Address*"
@@ -65,6 +105,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
           />
 
+          {/* PASSWORD */}
           <input
             type="password"
             placeholder="Password*"
@@ -75,39 +116,54 @@ export default function Login() {
 
           {/* OPTIONS */}
           <div style={styles.options}>
+
             <div style={styles.checkBox}>
+
               <input type="checkbox" />
+
               <span>Remember Me</span>
+
             </div>
 
             <span style={styles.forgot}>
               Forgot Password?
             </span>
+
           </div>
 
-          {/* BUTTON */}
-          <button style={styles.button} onClick={handleLogin}>
+          {/* LOGIN BUTTON */}
+          <button
+            style={styles.button}
+            onClick={handleLogin}
+          >
             Login
           </button>
 
           {/* REGISTER */}
           <p style={styles.registerText}>
+
             Don’t have an account?
+
             <Link to="/register" style={styles.link}>
               {" "}Register
             </Link>
+
           </p>
 
         </div>
+
       </div>
 
     </div>
+
   );
+
 }
 
 /* ================= STYLES ================= */
 
 const styles = {
+
   container: {
     display: "flex",
     height: "100vh",
@@ -163,7 +219,8 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "8px",
     outline: "none",
-    fontSize: "14px"
+    fontSize: "14px",
+    boxSizing: "border-box"
   },
 
   options: {
@@ -210,4 +267,5 @@ const styles = {
     color: "#8B0000",
     fontWeight: "bold"
   }
+
 };
